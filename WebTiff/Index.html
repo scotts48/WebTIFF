@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="nbt-ccitt-g3g4.js"></script>
+    <script src="nbt-tiff.js"></script>
+</head>
+<body>
+    <div style="background: grey;">
+        <!--<img id="outImage" />-->
+        <canvas id="outCanvas" ></canvas>
+    </div>
+
+    <script>
+        //self-executing document ready
+        (function () {
+
+            var oReq = new XMLHttpRequest();
+            oReq.open("GET", "SampleFront1.tiff", true);
+            oReq.responseType = "arraybuffer";
+            oReq.onload = function (e) {
+                var tiffReader = new NBT.TiffReader(oReq.response);
+                if (tiffReader.readPage()) {
+
+                    //var outImage = document.getElementById('outImage');
+                    //outImage.width = tiffReader.page.imageWidth;
+                    //outImage.height = tiffReader.page.imageHeight;
+                    //tiffReader.decompressToImage(outImage);
+
+                    var outCanvas = document.getElementById('outCanvas');
+                    tiffReader.decompressToCanvas(outCanvas);
+                }
+
+            };
+            oReq.onerror = function (e) {
+                alert('arg! ' + oReq.statusText);
+            };
+            oReq.send();
+        })();
+    </script>
+</body>
+</html>
